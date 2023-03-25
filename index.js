@@ -9,7 +9,7 @@ connectDb()
 const app = express()
 app.use(cors())
 app.use(express.json())
-
+app.use('/api/notes',require('./routes/notesRoutes'))
 app.use('/api/user',require("./routes/userRoutes"))
 app.use(errorHandler)
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

@@ -49,7 +49,7 @@ const loginUser = tryCatch(asyncHanlder(async (req, res) => {
                 name: user.name,
                 email: user.email,
               },     
-        },process.env.ACCESS_TOKEN_SECERT,{ expiresIn: "3m" })
+        },process.env.ACCESS_TOKEN_SECERT,{ expiresIn: "30m" })
         res.json({accessToken})
     }else{
         throw new Error("Invalid values")
