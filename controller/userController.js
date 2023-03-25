@@ -26,7 +26,16 @@ const registerUser = tryCatch(asyncHanlder(async (req, res) => {
     if (!user) {
         throw new Error("Something went wrong")
     }
-    return res.status(200).json(user)
+
+    const accessToken = jwt.sign({
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          },     
+    },process.env.ACCESS_TOKEN_SECERT,{ expiresIn: "30m" })
+    res.json({accessToken})
+
 }))
 
 
