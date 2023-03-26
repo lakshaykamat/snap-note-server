@@ -14,7 +14,7 @@ const notesSchema = moongoose.Schema({
         type: String,
     },
     tags: {
-        type: String,
+        type: Array,
         default: "#general"
     },
 }, {

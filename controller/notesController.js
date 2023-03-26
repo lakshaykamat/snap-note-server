@@ -48,6 +48,13 @@ const deleteNote = tryCatch(asyncHanlder(async(req,res)=>{
     res.status(200).json(note)
 
 }))
+const deleteAllNote = tryCatch(asyncHanlder(async(req,res)=>{
+    const notes = await notesModel.find({user_id:req.user.id})
+    console.log({notes})
+    const a = await notesModel.deleteMany({user_id:req.user.id})
+    res.json({message:a})
+
+}))
 
 const getNote = tryCatch(asyncHanlder(async(req,res)=>{
     const note = await notesModel.findById(req.params.id)
@@ -57,4 +64,4 @@ const getNote = tryCatch(asyncHanlder(async(req,res)=>{
     }
     res.status(200).json(note) 
 }))
-module.exports = {getAllNotes,createNote,updateNote,deleteNote,getNote}
+module.exports = {getAllNotes,createNote,updateNote,deleteNote,getNote,deleteAllNote}
