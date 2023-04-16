@@ -1,80 +1,84 @@
 const { tryCatch } = require("../utils/tryCatch");
-const asyncHanlder = require('express-async-handler');
+const asyncHandler = require('express-async-handler');
 const notesModel = require("../models/notesModel");
-
-const getAllNotes = tryCatch(asyncHanlder(async(req,res)=>{
-    const notes = await notesModel.find({user_id:req.user.id})
+const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
+    const notes = await notesModel.find({ user_id: req.user.id })
     res.json(notes)
 }))
 
-const createNote = tryCatch(asyncHanlder(async(req,res)=>{
-    const {title,body,tags} = req.body
+const createNote = tryCatch(asyncHandler(async (req, res) => {
+    const { title, body, tags } = req.body
     const creating = await notesModel.create({
-        title,body,tags,user_id:req.user.id
+        title, body, tags, user_id: req.user.id
     })
     res.status(201).json(creating)
 }))
 
-const updateNote = tryCatch(asyncHanlder(async(req,res)=>{
-    const {title ,body,tags} = req.body
+const updateNote = tryCatch(asyncHandler(async (req, res) => {
+    const { title, body, tags } = req.body
     const note = await notesModel.findById(req.params.id)
-    if(!note){
+    if (!note) {
         throw new Error("Note not found")
     }
-    if(note.user_id.toString() !== req.user.id){
+    if (note.user_id.toString() !== req.user.id) {
         res.status(403)
         throw new Error("Forbidden")
     }
     const updatedNote = await notesModel.findByIdAndUpdate(
         req.params.id,
         req.body,
-        {new:true}
+        { new: true }
     )
 
     res.status(200).json(updatedNote)
 }))
 
-const deleteNote = tryCatch(asyncHanlder(async(req,res)=>{
+const deleteNote = tryCatch(asyncHandler(async (req, res) => {
     const note = await notesModel.findById(req.params.id);
-    if(!note){
+    if (!note) {
         res.status(404)
         throw new Error("Note not found")
     }
-    if(note.user_id.toString() !== req.user.id){
+    if (note.user_id.toString() !== req.user.id) {
         res.status(403)
         throw new Error("Forbidden")
     }
-    await notesModel.findByIdAndDelete({_id:req.params.id})
+    await notesModel.findByIdAndDelete({ _id: req.params.id })
     res.status(200).json(note)
 
 }))
-const deleteAllNote = tryCatch(asyncHanlder(async(req,res)=>{
-    const notes = await notesModel.find({user_id:req.user.id})
-    console.log({notes})
-    const a = await notesModel.deleteMany({user_id:req.user.id})
-    res.json({message:a})
+const deleteAllNote = tryCatch(asyncHandler(async (req, res) => {
+    const notes = await notesModel.find({ user_id: req.user.id })
+    console.log({ notes })
+    const a = await notesModel.deleteMany({ user_id: req.user.id })
+    res.json({ message: a })
 
 }))
 
-const getNote = tryCatch(asyncHanlder(async(req,res)=>{
+const getNote = tryCatch(asyncHandler(async (req, res) => {
     const note = await notesModel.findById(req.params.id)
-    if(!note){
+    if (!note) {
         res.status(404)
         throw new Error("Note not Found")
     }
-    res.status(200).json(note) 
+    res.status(200).json(note)
 }))
-const searchNote = tryCatch(asyncHanlder(async(req,res)=>{
-    const KEY = req.params.key 
-   let data = await notesModel.find(
-    {
-        "$or":[
-            {"title":{$regex:KEY}},
-            {"body":{$regex:KEY}},
-            {"tags":{$regex:KEY}}
-        ]
+const searchNote = tryCatch(asyncHandler(async (req, res) => {
+    const KEY = req.params.key
+
+    if(KEY){
+        const data = await notesModel.find(
+            {
+                user_id: req.user.id,
+                "$or": [
+                    { "title": { $regex: KEY } },
+                    { "body": { $regex: KEY } },
+                    { "tags": { $regex: KEY } }
+                ]
+            }
+        )
+        res.json(data)
     }
-   )
-  res.json(data)
+   
 }))
-module.exports = {getAllNotes,createNote,updateNote,deleteNote,getNote,deleteAllNote,searchNote}
+module.exports = { getAllNotes, createNote, updateNote, deleteNote, getNote, deleteAllNote, searchNote }

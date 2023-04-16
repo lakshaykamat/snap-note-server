@@ -1,6 +1,6 @@
 const express = require('express')
 const {body, validationResult} = require('express-validator')
-const {registerUser, loginUser, currentUser,editUser}  = require('../controller/userController.js')
+const {registerUser, loginUser, currentUser,editUser,allUser}  = require('../controller/userController.js')
 const ValidateToken = require('../middleware/ValidateToken.js')
 const router = express.Router()
 
@@ -13,4 +13,5 @@ router.post("/login",VALIDATING,loginUser)
 router.put("/avatar",ValidateToken,editUser)
 
 router.get("/current",ValidateToken,currentUser)
+router.get("/all",ValidateToken,allUser)
 module.exports = router

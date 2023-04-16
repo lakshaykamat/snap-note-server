@@ -73,6 +73,7 @@ const editUser = tryCatch(asyncHandler(async (req, res) => {
 
     //existed user
     const user = req.user
+
     if(!name){
         name = user.name
     }
@@ -111,4 +112,10 @@ const currentUser = tryCatch(asyncHandler(async (req, res) => {
     res.json(req.user);
 
 }))
-module.exports = { registerUser, loginUser, currentUser, editUser }
+
+const allUser = tryCatch(asyncHandler(async (req, res) => {
+    let users = await userModel.find()
+    res.json(users)
+
+}))
+module.exports = { registerUser, loginUser, currentUser, editUser, allUser }
