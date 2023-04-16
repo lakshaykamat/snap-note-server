@@ -64,4 +64,17 @@ const getNote = tryCatch(asyncHanlder(async(req,res)=>{
     }
     res.status(200).json(note) 
 }))
-module.exports = {getAllNotes,createNote,updateNote,deleteNote,getNote,deleteAllNote}
+const searchNote = tryCatch(asyncHanlder(async(req,res)=>{
+    const KEY = req.params.key 
+   let data = await notesModel.find(
+    {
+        "$or":[
+            {"title":{$regex:KEY}},
+            {"body":{$regex:KEY}},
+            {"tags":{$regex:KEY}}
+        ]
+    }
+   )
+  res.json(data)
+}))
+module.exports = {getAllNotes,createNote,updateNote,deleteNote,getNote,deleteAllNote,searchNote}
