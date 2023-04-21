@@ -6,6 +6,26 @@ const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
     res.json(notes)
 }))
 
+const getAllNotesByLatest = tryCatch(asyncHandler(async (req, res) => {
+   notesModel.find({ user_id: req.user.id }).sort({ createdAt: 'desc' }).then((notes)=>{
+    res.json(notes)
+   }).catch((err)=> console.log(err))
+}))
+
+const getAllNotesByTags = tryCatch(asyncHandler(async (req, res) => {
+    const TAG = `#${req.params.tags}`
+    const userNotes = await notesModel.find({ user_id: req.user.id,tags:TAG})
+    res.json(userNotes)
+}))
+const allTags = tryCatch(asyncHandler(async (req, res) => {
+    const notes = await notesModel.find({user_id:req.user.id});
+    const tags = new Set();
+    notes.forEach(note => {
+      note.tags.forEach(tag => tags.add(tag));
+    });
+    res.status(200).json(Array.from(tags));
+}))
+
 const createNote = tryCatch(asyncHandler(async (req, res) => {
     const { title, body, tags } = req.body
     const creating = await notesModel.create({
@@ -15,7 +35,6 @@ const createNote = tryCatch(asyncHandler(async (req, res) => {
 }))
 
 const updateNote = tryCatch(asyncHandler(async (req, res) => {
-    const { title, body, tags } = req.body
     const note = await notesModel.findById(req.params.id)
     if (!note) {
         throw new Error("Note not found")
@@ -66,7 +85,7 @@ const getNote = tryCatch(asyncHandler(async (req, res) => {
 const searchNote = tryCatch(asyncHandler(async (req, res) => {
     const KEY = req.params.key
 
-    if(KEY){
+    if (KEY) {
         const data = await notesModel.find(
             {
                 user_id: req.user.id,
@@ -79,6 +98,6 @@ const searchNote = tryCatch(asyncHandler(async (req, res) => {
         )
         res.json(data)
     }
-   
+
 }))
-module.exports = { getAllNotes, createNote, updateNote, deleteNote, getNote, deleteAllNote, searchNote }
+module.exports = { getAllNotes, createNote, updateNote, deleteNote, getNote, deleteAllNote, searchNote,getAllNotesByLatest,getAllNotesByTags,allTags}

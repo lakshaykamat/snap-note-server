@@ -33,10 +33,11 @@ const registerUser = tryCatch(asyncHandler(async (req, res) => {
             id: user.id,
             name: user.name,
             email: user.email,
-            avatar: user.avatar
+            avatar: user.avatar,
+            createdAt:user.createdAt
         },
     }, process.env.ACCESS_TOKEN_SECERT)
-    res.json({ accessToken })
+    res.json({ user,accessToken })
 
 }))
 
@@ -59,7 +60,8 @@ const loginUser = tryCatch(asyncHandler(async (req, res) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                avatar: user.avatar
+                avatar: user.avatar,
+                createdAt:user.createdAt
             },
         }, process.env.ACCESS_TOKEN_SECERT)
         res.json({ accessToken })
@@ -99,7 +101,8 @@ const editUser = tryCatch(asyncHandler(async (req, res) => {
                 id: user.id,
                 name: user.name,
                 email: user.email,
-                avatar: user.avatar
+                avatar: user.avatar,
+                createdAt:user.createdAt
             },
         }, process.env.ACCESS_TOKEN_SECERT)
         res.json({ accessToken })
