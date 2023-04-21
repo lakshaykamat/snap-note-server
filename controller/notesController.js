@@ -7,9 +7,25 @@ const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
 }))
 
 const getAllNotesByLatest = tryCatch(asyncHandler(async (req, res) => {
-   notesModel.find({ user_id: req.user.id }).sort({ createdAt: 'desc' }).then((notes)=>{
-    res.json(notes)
+   notesModel.find({ user_id: req.user.id }).sort({ createdAt: 'desc' }).then(async(notes)=>{
+    // res.json(notes)
+
+    const notes1 = await notesModel.find({user_id:req.user.id});
+    const tags = new Set();
+    notes1.forEach(note => {
+      note.tags.forEach(tag => tags.add(tag));
+    });
+    let ta= Array.from(tags)
+    res.status(200).json({notes,tags:ta});
+
    }).catch((err)=> console.log(err))
+
+//    const notes = await notesModel.find({user_id:req.user.id});
+//    const tags = new Set();
+//    notes.forEach(note => {
+//      note.tags.forEach(tag => tags.add(tag));
+//    });
+//    res.status(200).json(Array.from(tags));
 }))
 
 const getAllNotesByTags = tryCatch(asyncHandler(async (req, res) => {
