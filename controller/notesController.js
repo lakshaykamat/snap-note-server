@@ -2,8 +2,17 @@ const { tryCatch } = require("../utils/tryCatch");
 const asyncHandler = require('express-async-handler');
 const notesModel = require("../models/notesModel");
 const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await notesModel.find({ user_id: req.user.id })
-    res.json(notes)
+    notesModel.find({ user_id: req.user.id }).sort({ createdAt: 'asc' }).then(async(notes)=>{
+    
+        const notes1 = await notesModel.find({user_id:req.user.id});
+        const tags = new Set();
+        notes1.forEach(note => {
+          note.tags.forEach(tag => tags.add(tag));
+        });
+        let ta= Array.from(tags)
+        res.status(200).json({notes,tags:ta});
+    
+       }).catch((err)=> res.json(err))
 }))
 
 const getAllNotesByLatest = tryCatch(asyncHandler(async (req, res) => {
