@@ -21,5 +21,4 @@ app.use(errorHandler)
 //---API Routes---
 app.use('/api/v1/notes', require('./routes/notes'))
 app.use('/api/v1/folder', require('./routes/folder'))
-app.use('/api/v1/user', require("./routes/userRoutes"))
 app.listen(port, () => console.log(`Server listening on port ${port}!`))
