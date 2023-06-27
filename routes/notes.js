@@ -1,12 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const {getAllNotes, createNote, updateNote, deleteNote,getNote, deleteAllNote,searchNote,getAllNotesByTags,allTags} = require('../controller/notesController')
-const ValidateToken = require('../middleware/ValidateToken')
-const passport = require('passport')
-const { isAuthenticated } = require('../config/passport.js')
+const isAuthenticated = require('../middleware/isAuthenticated')
 
-//[ ] Add authentication in this route
-//[ ] Remvove past jwt authentication system
 router.use(isAuthenticated)
 router.route('/').get(getAllNotes).post(createNote).delete(deleteAllNote)
 router.route('/tags/all').get(allTags)

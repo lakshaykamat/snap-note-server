@@ -1,21 +1,11 @@
 const { tryCatch } = require("../utils/tryCatch");
 const asyncHandler = require('express-async-handler');
 const Notes = require("../models/Notes");
-const Folder = require("../models/Folder");
-
 const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await Notes.find()
-    return res.status(200).json({ notes })
+    const notes = await Notes.find({_id:req.user._id})
+    res.status(200).json(notes)
 }))
 
-const allTags = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await Notes.find({ user_id: req.user.id });
-    const tags = new Set();
-    notes.forEach(note => {
-        note.tags.forEach(tag => tags.add(tag));
-    });
-    res.status(200).json(Array.from(tags));
-}))
 
 const createNote = tryCatch(asyncHandler(async (req, res) => {
     const { title, content, parentId, tags } = req.body;
