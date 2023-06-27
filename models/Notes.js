@@ -1,6 +1,6 @@
 const moongoose = require('mongoose')
 
-const notesSchema = moongoose.Schema({
+const Notes = moongoose.Schema({
     user_id: {
         type: moongoose.Schema.Types.ObjectId,
         required: true,
@@ -20,4 +20,4 @@ const notesSchema = moongoose.Schema({
 }, {
     timestamps: true
 })
-module.exports = moongoose.model("Notes", notesSchema)
+module.exports = moongoose.model("Notes", Notes)
