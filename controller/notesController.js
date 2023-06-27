@@ -1,30 +1,22 @@
 const { tryCatch } = require("../utils/tryCatch");
 const asyncHandler = require('express-async-handler');
-const notesModel = require("../models/notesModel");
+const Notes = require("../models/Notes");
 const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await notesModel.find({ user_id: req.user.id })
+    const notes = await Notes.find({_id:req.user._id})
     res.status(200).json(notes)
 }))
 
-const allTags = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await notesModel.find({user_id:req.user.id});
-    const tags = new Set();
-    notes.forEach(note => {
-      note.tags.forEach(tag => tags.add(tag));
-    });
-    res.status(200).json(Array.from(tags));
-}))
 
 const createNote = tryCatch(asyncHandler(async (req, res) => {
     const { title, body, tags } = req.body
-    const creating = await notesModel.create({
+    const creating = await Notes.create({
         title, body, tags, user_id: req.user.id
     })
     res.status(201).json(creating)
 }))
 
 const updateNote = tryCatch(asyncHandler(async (req, res) => {
-    const note = await notesModel.findById(req.params.id)
+    const note = await Notes.findById(req.params.id)
     if (!note) {
         throw new Error("Note not found")
     }
@@ -32,7 +24,7 @@ const updateNote = tryCatch(asyncHandler(async (req, res) => {
         res.status(403)
         throw new Error("Forbidden")
     }
-    const updatedNote = await notesModel.findByIdAndUpdate(
+    const updatedNote = await Notes.findByIdAndUpdate(
         req.params.id,
         req.body,
         { new: true }
@@ -42,7 +34,7 @@ const updateNote = tryCatch(asyncHandler(async (req, res) => {
 }))
 
 const deleteNote = tryCatch(asyncHandler(async (req, res) => {
-    const note = await notesModel.findById(req.params.id);
+    const note = await Notes.findById(req.params.id);
     if (!note) {
         res.status(404)
         throw new Error("Note not found")
@@ -51,20 +43,20 @@ const deleteNote = tryCatch(asyncHandler(async (req, res) => {
         res.status(403)
         throw new Error("Forbidden")
     }
-    await notesModel.findByIdAndDelete({ _id: req.params.id })
+    await Notes.findByIdAndDelete({ _id: req.params.id })
     res.status(200).json(note)
 
 }))
 const deleteAllNote = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await notesModel.find({ user_id: req.user.id })
+    const notes = await Notes.find({ user_id: req.user.id })
     console.log({ notes })
-    const a = await notesModel.deleteMany({ user_id: req.user.id })
+    const a = await Notes.deleteMany({ user_id: req.user.id })
     res.json({ message: a })
 
 }))
 
 const getNote = tryCatch(asyncHandler(async (req, res) => {
-    const note = await notesModel.findById(req.params.id)
+    const note = await Notes.findById(req.params.id)
     if (!note) {
         res.status(404)
         throw new Error("Note not Found")
@@ -75,7 +67,7 @@ const searchNote = tryCatch(asyncHandler(async (req, res) => {
     const KEY = req.params.key
 
     if (KEY) {
-        const data = await notesModel.find(
+        const data = await Notes.find(
             {
                 user_id: req.user.id,
                 "$or": [
