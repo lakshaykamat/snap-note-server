@@ -1,0 +1,543 @@
+{
+	"info": {
+		"_postman_id": "494a85bc-6e63-4c81-824c-0603c54076ed",
+		"name": "Quill Sage",
+		"description": "The Quill Sage API provides a powerful and flexible backend for building note-taking and collaboration applications. It offers a range of features to manage and organize notes effectively. With this API, users can create, retrieve, update, and delete notes, allowing them to capture and store their thoughts, ideas, and important information. The API supports user authentication, ensuring secure access to notes and user-specific data. It also provides functionality for folder management, enabling users to organize their notes into logical categories. With its intuitive and well-documented endpoints, the Notes Application API empowers developers to create robust and user-friendly note-taking applications.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "26210024-494a85bc-6e63-4c81-824c-0603c54076ed"
+	},
+	"item": [
+		{
+			"name": "User Notes",
+			"item": [
+				{
+					"name": "All Notes",
+					"id": "6cc276dd-9318-4b5a-8db1-4e38f7168480",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhmMTYwYmJiODVlMDgyMmFjNzBhZGYiLCJpYXQiOjE2ODc2ODU3MjZ9.vZRCDLYchkj5Aw5RUi6tnvC8bkHtWt4aKj38wk438n8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{LOCALURL}}/api/v1/notes/",
+							"host": [
+								"{{LOCALURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Note",
+					"id": "55f0f1eb-67dc-45ec-b637-73c7614c5eed",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhmMTYwYmJiODVlMDgyMmFjNzBhZGYiLCJpYXQiOjE2ODc2ODU3MjZ9.vZRCDLYchkj5Aw5RUi6tnvC8bkHtWt4aKj38wk438n8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"poop\",\r\n    \"content\":\"note body1\",\r\n    \"tags\":[\"ee\",\"Eee\"],\r\n    \"folderId\":\"649bd9b7e4e5b8c8f3bf696f\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALURL}}/api/v1/notes/",
+							"host": [
+								"{{LOCALURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete All Notes",
+					"id": "6a12d3d7-bc13-4377-a41c-1b3abbceddde",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"What is enum\",\r\n    \"content\":\"D\",\r\n    \"tags\":[\"reactjs\",\"ed\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/notes/",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Note",
+					"id": "35624de9-3478-4f80-a7ce-f257e9001101",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/notes/649b4c23704f9a8000f37937",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"notes",
+								"649b4c23704f9a8000f37937"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Note",
+					"id": "1e075493-c0a6-4575-b19d-2ecb856f6b34",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"What is enum\",\r\n    \"content\":\"D\",\r\n    \"tags\":[\"reactjs\",\"ed\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/notes/search/po",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"notes",
+								"search",
+								"po"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "3daaf567-822c-4720-96a7-e0a90d005f4f",
+			"description": "- Users can create\n- Users can delete\n- Users can update\n- Users can search\n- User can and retrieve individual notes\n- Users can list all notes"
+		},
+		{
+			"name": "Folder",
+			"item": [
+				{
+					"name": "Create New Folder",
+					"id": "e9df7709-d49a-4e32-a158-e87e7364676c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Eren32\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/folder/",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"folder",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Notes",
+					"id": "a37b76c5-ff0d-47e2-903d-945e0a295cd7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/folder/all/notes/649bd9b7e4e5b8c8f3bf696f",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"folder",
+								"all",
+								"notes",
+								"649bd9b7e4e5b8c8f3bf696f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Folders",
+					"id": "544aa794-1edb-4b84-a30c-92701b409c6b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/folder/",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"folder",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete All Folder",
+					"id": "4032b798-8dc7-4fc4-a9c5-2be4ca3d4488",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/folder/",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"folder",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteFolder",
+					"id": "a55819b2-7316-45a9-a618-e8f90fc5d0cf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL_URL}}v1/folder/649bdd378ad1301018e3f927",
+							"host": [
+								"{{LOCAL_URL}}v1"
+							],
+							"path": [
+								"folder",
+								"649bdd378ad1301018e3f927"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Folder",
+					"id": "c62eac2a-7f78-4d67-999f-6ce22449e428",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/folder/get/649bd9b7e4e5b8c8f3bf696f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"folder",
+								"get",
+								"649bd9b7e4e5b8c8f3bf696f"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "74ecff5a-a377-4f9d-a24e-7c730125017c"
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Google Login",
+					"id": "e998d755-7f24-4351-9a6a-2392ddf2b48d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Fgoogle%2Fcallback&scope=email%20profile&client_id=633755133547-a1me2kqvkm5dno1b034q4utcqe25hgnk.apps.googleusercontent.com&service=lso&o2v=2&flowName=GeneralOAuthFlow",
+							"protocol": "https",
+							"host": [
+								"accounts",
+								"google",
+								"com"
+							],
+							"path": [
+								"o",
+								"oauth2",
+								"v2",
+								"auth",
+								"oauthchooseaccount"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http%3A%2F%2Flocalhost%3A8080%2Fauth%2Fgoogle%2Fcallback"
+								},
+								{
+									"key": "scope",
+									"value": "email%20profile"
+								},
+								{
+									"key": "client_id",
+									"value": "633755133547-a1me2kqvkm5dno1b034q4utcqe25hgnk.apps.googleusercontent.com"
+								},
+								{
+									"key": "service",
+									"value": "lso"
+								},
+								{
+									"key": "o2v",
+									"value": "2"
+								},
+								{
+									"key": "flowName",
+									"value": "GeneralOAuthFlow"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"id": "520f878d-9771-41d4-a6cc-99ec7887e85f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "scope",
+									"value": "profile email",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "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",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "633755133547-a1me2kqvkm5dno1b034q4utcqe25hgnk.apps.googleusercontent.com",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/auth/getuser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"getuser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "741a080f-b275-40a3-8fdc-a805b8b599cf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "useBrowser",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "http://localhost:8080/auth/google/callback",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://accounts.google.com/o/oauth2/auth",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "email profile",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "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",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "633755133547-a1me2kqvkm5dno1b034q4utcqe25hgnk.apps.googleusercontent.com",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/notes/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"notes",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "fb90528c-19f2-49f0-b63c-d173635f65bb"
+		}
+	],
+	"variable": [
+		{
+			"id": "2e40b635-e37d-46f9-8349-729ca90383ed",
+			"key": "LOCALURL",
+			"value": "http://localhost:8080"
+		}
+	]
+}
