@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const Notes = mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
-    parentId: {
+    folderId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Folder',
         required: true,
@@ -29,6 +30,10 @@ const Notes = mongoose.Schema({
     tags: {
         type: Array,
         required: [true, "Tags is required"]
+    },
+    author:{
+        type:String,
+        required:true
     }
 }, {
     timestamps: true

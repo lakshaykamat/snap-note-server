@@ -1,18 +1,20 @@
 const mongoose = require('mongoose');
-const Notes = require('./Notes');
 
 const Folder = new mongoose.Schema({
     name: {
         type: String,
-        default: 'New Folder'
-    },
-    parentId: { 
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Folder' 
+        default: 'New Folder',
+        unique: [true,"Name already exists."],
     },
     notes:{
-        type:mongoose.Schema.Types.ObjectId,
-    }
+        type: Array,
+        default: null,
+    },
+    user_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
 }, {
     timestamps: true
 });

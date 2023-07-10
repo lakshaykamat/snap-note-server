@@ -1,18 +1,33 @@
 const { tryCatch } = require("../utils/tryCatch");
 const asyncHandler = require('express-async-handler');
 const Notes = require("../models/Notes");
+const Folder = require("../models/Folder");
 const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await Notes.find({_id:req.user._id})
+    if(!req.user){
+        return res.json({message: "Failed to get all notes"})
+    }
+    const notes = await Notes.find({user_id:req.user.id})
     res.status(200).json(notes)
 }))
 
 
 const createNote = tryCatch(asyncHandler(async (req, res) => {
-    const { title, content, parentId, tags } = req.body;
-    const folder = await Folder.findById(parentId);
+    const { title, content, folderId, tags,author } = req.body;
+    const folder = await Folder.findById(folderId);
     if (folder) {
-        const newNote = await Notes.create({ title, content, parentId, tags })
-        return res.json(newNote);
+        //Existing notes of folder
+        const existingNotes = await Notes.find({folderId:folder.id})
+        
+        //New Note of Folder
+        const newNote = await Notes.create({ title, content, folderId, tags ,author,user_id:req.user.id})
+
+        //Updating Folder (adding new note)
+         let updatedNote = existingNotes ? [...existingNotes,newNote] : newNote
+
+        await Folder.findByIdAndUpdate({_id:folderId},{notes:updatedNote});
+
+
+        return  res.status(201).json({note:newNote,message:"Folder updated successfully"});
     } else {
         return res.status(404).json({ message: 'Folder not found' });
     }
@@ -28,7 +43,19 @@ const updateNote = tryCatch(asyncHandler(async (req, res) => {
         req.body,
         { new: true }
     )
-    res.status(200).json(updatedNote)
+    const existingNotesOfFolder = await Folder.findById(note.folderId)
+    const replace = existingNotesOfFolder.notes.map((item)=>{
+        if(item._id === req.params.id){
+            return updatedNote
+        }
+        return item
+    })
+    const folder = await Folder.findByIdAndUpdate({_id:note.folderId},{notes: replace});
+    res.status(200).json({
+        folder,
+        existingNotesOfFolder,
+        updateNote
+    })
 }))
 
 const deleteNote = tryCatch(asyncHandler(async (req, res) => {
@@ -61,7 +88,7 @@ const searchNote = tryCatch(asyncHandler(async (req, res) => {
             {
                 "$or": [
                     { "title": { $regex: KEY } },
-                    { "body": { $regex: KEY } },
+                    { "content": { $regex: KEY } },
                     { "tags": { $regex: KEY } }
                 ]
             }
@@ -79,5 +106,4 @@ module.exports = {
     getNote,
     deleteAllNote,
     searchNote,
-    allTags
 }

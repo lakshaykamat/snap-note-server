@@ -5,7 +5,6 @@ const express = require('express')
 const port = process.env.PORT || 8080
 const connectDb = require('./config/db')
 const cors = require('cors')
-const errorHandler = require('./middleware/errorHandler')
 const passport = require('passport')
 const cookieSession = require('cookie-session')
 const isAuthenticated = require('./middleware/isAuthenticated.js')
@@ -26,7 +25,7 @@ app.use(passport.session())
 app.use(passport.initialize())
 
 
-app.use('/api/notes', require('./routes/notesRoutes'))
+
 
 app.get('/auth/google',
     passport.authenticate('google', { scope: ['email', 'profile'] })
@@ -34,17 +33,16 @@ app.get('/auth/google',
 
 app.get('/auth/google/callback',
     passport.authenticate('google', {
-        successRedirect: process.env.CLIENT_URL + '/home',
+        successRedirect: process.env.CLIENT_URL + '/',
         failureRedirect: process.env.CLIENT_URL + "/failed"
     })
 )
 
 app.get('/auth/getuser', isAuthenticated, (req, res) => {
-    res.json({ user: req.user })
+    res.status(200).json(req.user)
 })
-app.use(errorHandler)
 
 //---API Routes---
-app.use('/api/v1/notes', require('./routes/notes'))
-app.use('/api/v1/folder', require('./routes/folder'))
+app.use('/api/v1/notes',isAuthenticated, require('./routes/notes'))
+app.use('/api/v1/folder', isAuthenticated,require('./routes/folder'))
 app.listen(port, () => console.log(`Server listening on port ${port}!`))
