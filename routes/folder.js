@@ -10,7 +10,7 @@ const {
 } = require('../controller/folderController')
 // const ValidateToken = require('../middleware/ValidateToken')
 
-//[ ] Add authentication in this route
+//[ ] Add A in this route
 //[ ] Remvove past jwt authentication system
 router.route('/').get(getAllFolder).post(createFolder)
 router.route('/:id').get(getFolder).delete(deleteFolder)

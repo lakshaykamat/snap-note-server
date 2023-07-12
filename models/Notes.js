@@ -24,8 +24,8 @@ const Notes = mongoose.Schema({
         default: true,
     },
     likes: {
-        type: Number,
-        default: 0
+        type: Array,
+        default:null
     },
     tags: {
         type: Array,
