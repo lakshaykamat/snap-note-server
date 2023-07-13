@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "494a85bc-6e63-4c81-824c-0603c54076ed",
-		"name": "Quill Sage",
+		"name": "Snap Note",
 		"description": "The Quill Sage API provides a powerful and flexible backend for building note-taking and collaboration applications. It offers a range of features to manage and organize notes effectively. With this API, users can create, retrieve, update, and delete notes, allowing them to capture and store their thoughts, ideas, and important information. The API supports user authentication, ensuring secure access to notes and user-specific data. It also provides functionality for folder management, enabling users to organize their notes into logical categories. With its intuitive and well-documented endpoints, the Notes Application API empowers developers to create robust and user-friendly note-taking applications.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_uid": "26210024-494a85bc-6e63-4c81-824c-0603c54076ed"
@@ -11,7 +11,7 @@
 			"name": "User Notes",
 			"item": [
 				{
-					"name": "All Notes",
+					"name": "All Notes(Both)",
 					"id": "6cc276dd-9318-4b5a-8db1-4e38f7168480",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -42,6 +42,68 @@
 					"response": []
 				},
 				{
+					"name": "All Private Notes of User",
+					"id": "f6dca423-37b9-4e89-bba5-2a98005d108b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhmMTYwYmJiODVlMDgyMmFjNzBhZGYiLCJpYXQiOjE2ODc2ODU3MjZ9.vZRCDLYchkj5Aw5RUi6tnvC8bkHtWt4aKj38wk438n8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{LOCALURL}}/api/v1/notes/private",
+							"host": [
+								"{{LOCALURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"private"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Public Notes of Users",
+					"id": "03a44ccb-bab8-42bf-a825-7f88e5a72be6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhmMTYwYmJiODVlMDgyMmFjNzBhZGYiLCJpYXQiOjE2ODc2ODU3MjZ9.vZRCDLYchkj5Aw5RUi6tnvC8bkHtWt4aKj38wk438n8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{LOCALURL}}/api/v1/notes/public",
+							"host": [
+								"{{LOCALURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"public"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Note",
 					"id": "55f0f1eb-67dc-45ec-b637-73c7614c5eed",
 					"protocolProfileBehavior": {
@@ -59,7 +121,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\":\"poop\",\r\n    \"content\":\"note body1\",\r\n    \"tags\":[\"ee\",\"Eee\"],\r\n    \"folderId\":\"649bd9b7e4e5b8c8f3bf696f\"\r\n}",
+							"raw": "{\r\n    \"title\":\"Understanding the Role of Artificial Intelligence in Healthcare\",\r\n    \"content\":\"Abstract: This journal provides an overview of the role of artificial intelligence (AI) in healthcare. It explores the applications of AI in medical diagnostics, personalized treatment, drug discovery, and patient care. The study discusses the potential benefits and challenges associated with implementing AI in healthcare systems, including ethical considerations and data privacy concerns. It concludes with recommendations for harnessing the power of AI to enhance healthcare delivery and improve patient outcomes.\",\r\n    \"tags\":[],\r\n    \"folderId\":\"64afcdce5530f60efeb6c7ac\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,7 +144,91 @@
 					"response": []
 				},
 				{
-					"name": "Delete All Notes",
+					"name": "Update Note",
+					"id": "3fbc5fcb-f3da-4e7a-a6e2-93eb4bd1e218",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhmMTYwYmJiODVlMDgyMmFjNzBhZGYiLCJpYXQiOjE2ODc2ODU3MjZ9.vZRCDLYchkj5Aw5RUi6tnvC8bkHtWt4aKj38wk438n8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"React is OSM2\",\r\n    \"content\":\" pppp\",\r\n    \"author\":\" \",\r\n    \"tags\":[]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCALURL}}/api/v1/notes/:id",
+							"host": [
+								"{{LOCALURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64a9bdd5c13fe5fc8ee66700"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Visibility",
+					"id": "5e21c413-8c19-45d3-9283-e68722af4ec1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "auth-token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDhmMTYwYmJiODVlMDgyMmFjNzBhZGYiLCJpYXQiOjE2ODc2ODU3MjZ9.vZRCDLYchkj5Aw5RUi6tnvC8bkHtWt4aKj38wk438n8",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{LOCALURL}}/api/v1/notes/visibility/:id",
+							"host": [
+								"{{LOCALURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"visibility",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64afcdd75530f60efeb6c7b1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note",
 					"id": "6a12d3d7-bc13-4377-a41c-1b3abbceddde",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -100,13 +246,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/notes/",
+							"raw": "{{LOCALURL}}/api/v1/notes/:id",
 							"host": [
-								"{{LOCAL_URL}}v1"
+								"{{LOCALURL}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"notes",
-								""
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64adbf2f7a9111c6f975f596"
+								}
 							]
 						}
 					},
@@ -122,13 +276,21 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/notes/649b4c23704f9a8000f37937",
+							"raw": "{{LOCALURL}}/api/v1/notes/:noteid",
 							"host": [
-								"{{LOCAL_URL}}v1"
+								"{{LOCALURL}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"notes",
-								"649b4c23704f9a8000f37937"
+								":noteid"
+							],
+							"variable": [
+								{
+									"key": "noteid",
+									"value": "64ac091decd0e59a03723b45"
+								}
 							]
 						}
 					},
@@ -153,14 +315,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/notes/search/po",
+							"raw": "{{LOCAL_URL}}v1/notes/search/:key",
 							"host": [
 								"{{LOCAL_URL}}v1"
 							],
 							"path": [
 								"notes",
 								"search",
-								"po"
+								":key"
+							],
+							"variable": [
+								{
+									"key": "key",
+									"value": "Poo"
+								}
 							]
 						}
 					},
@@ -184,7 +352,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Eren32\"\r\n}",
+							"raw": "{\r\n    \"name\":\"New\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -192,11 +360,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/folder/",
+							"raw": "{{LOCALURL}}/api/v1/folder/",
 							"host": [
-								"{{LOCAL_URL}}v1"
+								"{{LOCALURL}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"folder",
 								""
 							]
@@ -205,7 +375,7 @@
 					"response": []
 				},
 				{
-					"name": "All Notes",
+					"name": "All Folder Notes",
 					"id": "a37b76c5-ff0d-47e2-903d-945e0a295cd7",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -214,15 +384,23 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/folder/all/notes/649bd9b7e4e5b8c8f3bf696f",
+							"raw": "{{LOCALURL}}/api/v1/folder/all/notes/:id",
 							"host": [
-								"{{LOCAL_URL}}v1"
+								"{{LOCALURL}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"folder",
 								"all",
 								"notes",
-								"649bd9b7e4e5b8c8f3bf696f"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64afcdce5530f60efeb6c7ac"
+								}
 							]
 						}
 					},
@@ -238,11 +416,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/folder/",
+							"raw": "{{LOCALURL}}/api/v1/folder/",
 							"host": [
-								"{{LOCAL_URL}}v1"
+								"{{LOCALURL}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"folder",
 								""
 							]
@@ -251,22 +431,39 @@
 					"response": []
 				},
 				{
-					"name": "Delete All Folder",
-					"id": "4032b798-8dc7-4fc4-a9c5-2be4ca3d4488",
+					"name": "Rename Folder",
+					"id": "320fd486-bfb1-40bf-b853-56ac26a4cc1a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
 					"request": {
-						"method": "DELETE",
+						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Entries\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/folder/",
+							"raw": "{{LOCALURL}}/api/v1/folder/:id",
 							"host": [
-								"{{LOCAL_URL}}v1"
+								"{{LOCALURL}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"folder",
-								""
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64adb388ba9457cd9fe258e6"
+								}
 							]
 						}
 					},
@@ -282,13 +479,21 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{LOCAL_URL}}v1/folder/649bdd378ad1301018e3f927",
+							"raw": "{{LOCALURL}}/api/v1/folder/:id",
 							"host": [
-								"{{LOCAL_URL}}v1"
+								"{{LOCALURL}}"
 							],
 							"path": [
+								"api",
+								"v1",
 								"folder",
-								"649bdd378ad1301018e3f927"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64afccbc4c507262f3965333"
+								}
 							]
 						}
 					},
@@ -304,18 +509,21 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/folder/get/649bd9b7e4e5b8c8f3bf696f",
-							"protocol": "http",
+							"raw": "{{LOCALURL}}/api/v1/folder/:id",
 							"host": [
-								"localhost"
+								"{{LOCALURL}}"
 							],
-							"port": "8080",
 							"path": [
 								"api",
 								"v1",
 								"folder",
-								"get",
-								"649bd9b7e4e5b8c8f3bf696f"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
 							]
 						}
 					},
@@ -386,7 +594,7 @@
 					"response": []
 				},
 				{
-					"name": "Get User",
+					"name": "Get User Details",
 					"id": "520f878d-9771-41d4-a6cc-99ec7887e85f",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -440,12 +648,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/auth/getuser",
-							"protocol": "http",
+							"raw": "{{LOCALURL}}/auth/getuser",
 							"host": [
-								"localhost"
+								"{{LOCALURL}}"
 							],
-							"port": "8080",
 							"path": [
 								"auth",
 								"getuser"
@@ -455,8 +661,8 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
-					"id": "741a080f-b275-40a3-8fdc-a805b8b599cf",
+					"name": "Fetch User Details",
+					"id": "1722a9a7-ecf0-4b26-9931-f1589e73aa9e",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -465,23 +671,28 @@
 							"type": "oauth2",
 							"oauth2": [
 								{
-									"key": "useBrowser",
-									"value": true,
-									"type": "boolean"
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
 								},
 								{
 									"key": "redirect_uri",
-									"value": "http://localhost:8080/auth/google/callback",
+									"value": "",
 									"type": "string"
 								},
 								{
-									"key": "authUrl",
-									"value": "https://accounts.google.com/o/oauth2/auth",
+									"key": "tokenName",
+									"value": "",
 									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": false,
+									"type": "boolean"
 								},
 								{
 									"key": "scope",
-									"value": "email profile",
+									"value": "profile email",
 									"type": "string"
 								},
 								{
@@ -495,16 +706,6 @@
 									"type": "string"
 								},
 								{
-									"key": "client_authentication",
-									"value": "body",
-									"type": "string"
-								},
-								{
-									"key": "tokenName",
-									"value": "",
-									"type": "string"
-								},
-								{
 									"key": "addTokenTo",
 									"value": "header",
 									"type": "string"
@@ -514,16 +715,45 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/notes/",
-							"protocol": "http",
+							"raw": "{{LOCALURL}}/api/v1/user/:id",
 							"host": [
-								"localhost"
+								"{{LOCALURL}}"
 							],
-							"port": "8080",
 							"path": [
 								"api",
-								"notes",
-								""
+								"v1",
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64ac08ccecd0e59a03723550"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Users",
+					"id": "28621db9-862f-4b39-b13f-34251347bedd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCALURL}}/api/v1/user/all",
+							"host": [
+								"{{LOCALURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"all"
 							]
 						}
 					},
