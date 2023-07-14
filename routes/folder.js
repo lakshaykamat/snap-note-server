@@ -12,7 +12,16 @@ const {
 
 //[ ] Add A in this route
 //[ ] Remvove past jwt authentication system
-router.route('/').get(getAllFolder).post(createFolder)
-router.route('/:id').get(getFolder).delete(deleteFolder)
+router.route('/')
+.get(getAllFolder)
+.post(createFolder)
+
+
+router.route('/:id')
+.get(getFolder)
+.delete(deleteFolder)
+.put(updateFolder)
+
+
 router.route('/all/notes/:id').get(getAllNotes)
 module.exports = router

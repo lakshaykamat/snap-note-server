@@ -6,10 +6,6 @@ const Folder = new mongoose.Schema({
         default: 'New Folder',
         unique: [true,"Name already exists."],
     },
-    notes:{
-        type: Array,
-        default: null,
-    },
     user_id:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

@@ -33,24 +33,37 @@ const createFolder = tryCatch(asyncHandler(async (req, res) => {
 
 }))
 
-const getFolder = tryCatch(asyncHandler(async (req, res) => {
+const getFolder = tryCatch(asyncHandler(async(req, res) => {
     const {id} = req.params
     const folder = await Folder.findById(id)
     res.json(folder)
 }))
 
 const updateFolder = tryCatch(asyncHandler(async (req, res) => {
-    
+    const note = await Folder.findById(req.params.id)
+    if (!note) {
+        throw new Error("Note not found")
+    }
+    await Folder.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+    )
+
+    res.status(200).json({
+        status:"success",
+        message:`Folder renamed to ${req.body.name}`
+    })
 }))
 
 const deleteFolder = tryCatch(asyncHandler(async (req, res) => {
     const {id} = req.params
     const del = await Folder.findByIdAndDelete(id)
-    await Notes.deleteMany({folderId:id})
+    const n = await Notes.deleteMany({folderId:id})
     if(!del){
         return res.json({message:"Folder not found"})
     }
-    return res.json({message:"Folder Deleted"})
+    return res.json({message:"Folder Deleted",notes:n,folder:del})
 }))
 
 module.exports = { 
