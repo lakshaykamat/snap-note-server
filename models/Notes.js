@@ -30,10 +30,6 @@ const Notes = mongoose.Schema({
     tags: {
         type: Array,
         required: [true, "Tags is required"]
-    },
-    author:{
-        type:String,
-        required:true
     }
 }, {
     timestamps: true
