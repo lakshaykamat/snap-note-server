@@ -9,6 +9,7 @@ const passport = require('passport')
 const cookieSession = require('cookie-session')
 const isAuthenticated = require('./middleware/isAuthenticated.js')
 const User = require('./models/User.js')
+const errorHandler = require('./middleware/errorHandler.js')
 
 //Connecting to Database
 connectDb()
@@ -47,5 +48,5 @@ app.get('/auth/getuser', isAuthenticated, (req, res) => {
 app.use('/api/v1/notes',isAuthenticated, require('./routes/notes'))
 app.use('/api/v1/folder', isAuthenticated,require('./routes/folder'))
 app.use('/api/v1/user',isAuthenticated,require('./routes/user.js'))
-
+app.use(errorHandler)
 app.listen(port, () => console.log(`Server listening on port ${port}!`))

@@ -7,7 +7,7 @@ const asyncHandler = require('express-async-handler');
 const getAllFolder = tryCatch(asyncHandler(async (req, res) => {
     //const newFolder = await Folder.find({user_id: req.user.id});
 
-    const newFolder = await Folder.find({user_id: req.user.id}).sort({ createdAt: -1 }).exec() .then((documents) => {
+    await Folder.find({user_id: req.user.id}).sort({ createdAt: -1 }).exec() .then((documents) => {
         // Use the sorted documents
         res.json(documents)
       })
@@ -51,19 +51,18 @@ const updateFolder = tryCatch(asyncHandler(async (req, res) => {
     )
 
     res.status(200).json({
-        status:"success",
         message:`Folder renamed to ${req.body.name}`
     })
 }))
 
 const deleteFolder = tryCatch(asyncHandler(async (req, res) => {
     const {id} = req.params
-    const del = await Folder.findByIdAndDelete(id)
-    const n = await Notes.deleteMany({folderId:id})
-    if(!del){
-        return res.json({message:"Folder not found"})
+    const folder = await Folder.findByIdAndDelete(id)
+    const notes = await Notes.deleteMany({folderId:id})
+    if(!folder){
+        throw new Error("Folder Not found")
     }
-    return res.json({message:"Folder Deleted",notes:n,folder:del})
+    return res.json({message:"Folder Deleted",notes,folder})
 }))
 
 module.exports = { 

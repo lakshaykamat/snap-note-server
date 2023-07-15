@@ -7,8 +7,8 @@ const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
     res.status(200).json(notes)
 }))
 
-const getAllPublicNotes = tryCatch(asyncHandler(async (req,res)=>{
-    const notes = await Notes.find({isPrivate:false})
+const getAllPublicNotes = tryCatch(asyncHandler(async (req, res) => {
+    const notes = await Notes.find({ isPrivate: false })
 
     //Not Include own public notes in own feed
     //const newArray = notes.filter(obj => obj.user_id.toString() !== req.user.id);
@@ -16,31 +16,32 @@ const getAllPublicNotes = tryCatch(asyncHandler(async (req,res)=>{
     res.status(200).json(notes)
 }))
 
-const getAllUserNotes = tryCatch(asyncHandler(async (req,res)=>{
-    const notes = await Notes.find({user_id:req.user.id})
+const getAllUserNotes = tryCatch(asyncHandler(async (req, res) => {
+    const notes = await Notes.find({ user_id: req.user.id })
     res.status(200).json(notes)
 }))
 
-const changeVisibility = tryCatch(asyncHandler(async (req,res)=>{
-    const  id  = req.params.id
+const changeVisibility = tryCatch(asyncHandler(async (req, res) => {
+    const id = req.params.id
     const note = await Notes.findById(id)
-    if(!note){
+    if (!note) {
         throw new Error("Note not found")
     }
     const visibility = note.isPrivate
-    await Notes.findByIdAndUpdate(id,{isPrivate:!visibility},{new:true})
-    res.status(200).json({message:`Note is now ${visibility ? "public" : "private"}`})
+    await Notes.findByIdAndUpdate(id, { isPrivate: !visibility }, { new: true })
+    res.status(200).json({ message: `Note is now ${visibility ? "public" : "private"}` })
 }))
 const createNote = tryCatch(asyncHandler(async (req, res) => {
-    const { title, content,folderId,tags,likes} = req.body;
+    const { title, content, folderId, tags, likes } = req.body;
     const folder = await Folder.findById(folderId);
     if (folder) {
         //New Note of Folder
-        const newNote = await Notes.create({ title, content, folderId,likes,tags,user_id:req.user.id})
+        await Notes.create({ title, content, folderId, likes, tags, user_id: req.user.id })
 
-        return  res.status(201).json({message:`New Note Created on ${folder.name} with id:${newNote._id}`});
+        return res.status(201).json({ message: `New Note Created on ${folder.name}` });
     } else {
-        return res.status(404).json({ message: 'Folder not found' });
+        res.status(404)
+        throw new Error("Folder Not Found")
     }
 }))
 
@@ -55,8 +56,8 @@ const updateNote = tryCatch(asyncHandler(async (req, res) => {
         { new: true }
     )
     res.status(200).json({
-        message:"Note Updated!",
-        body:req.body
+        message: "Note Updated!",
+        body: req.body
     })
 }))
 
@@ -89,9 +90,9 @@ const searchNote = tryCatch(asyncHandler(async (req, res) => {
         const data = await Notes.find(
             {
                 $or: [
-                    { title: { $regex: KEY,$options: 'i' } },
-                    { content: { $regex: KEY,$options: 'i' } },
-                    { tags: { $regex: KEY,$options: 'i' } },
+                    { title: { $regex: KEY, $options: 'i' } },
+                    { content: { $regex: KEY, $options: 'i' } },
+                    { tags: { $regex: KEY, $options: 'i' } },
                 ]
             }
         )
@@ -100,7 +101,7 @@ const searchNote = tryCatch(asyncHandler(async (req, res) => {
 
 }))
 
-module.exports = { 
+module.exports = {
     getAllNotes,
     createNote,
     updateNote,
