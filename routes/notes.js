@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {getAllNotes, createNote, getAllUserNotes,getAllPublicNotes,changeVisibility,deleteAllNote, deleteNote, getNote, updateNote, searchNote} = require('../controller/notesController')
+const {getAllNotes, createNote, getAllUserNotes,getPublicNotesofPerson,getAllPublicNotesofUser,changeVisibility,deleteAllNote, deleteNote, getNote, updateNote, searchNote, getAllTags} = require('../controller/notesController')
 
 
 router.route('/')
@@ -12,11 +12,22 @@ router.route('/')
 router.route('/search/:key')
 .get(searchNote)
 
+//All public notes of logedin user
 router.route('/public')
-.get(getAllPublicNotes)
+.get(getAllPublicNotesofUser)
 
+
+//All notes of logedin user
 router.route('/private')
 .get(getAllUserNotes)
+
+//Public notes of any user
+router.route('/user/:userid')
+.get(getPublicNotesofPerson)
+
+
+router.route('/tags/all')
+.get(getAllTags)
 
 router.route('/visibility/:id')
 .get(changeVisibility)

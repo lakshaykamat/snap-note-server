@@ -7,7 +7,16 @@ const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
     res.status(200).json(notes)
 }))
 
-const getAllPublicNotes = tryCatch(asyncHandler(async (req, res) => {
+const getAllTags = tryCatch(asyncHandler(async (req, res) => {
+    const notes = await Notes.find()
+    const tagsArray = []
+    notes.forEach(note => {
+        tagsArray.push(...note.tags);
+      });
+    res.status(200).json(tagsArray)
+}))
+
+const getAllPublicNotesofUser = tryCatch(asyncHandler(async (req, res) => {
     const notes = await Notes.find({ isPrivate: false })
 
     //Not Include own public notes in own feed
@@ -21,6 +30,11 @@ const getAllUserNotes = tryCatch(asyncHandler(async (req, res) => {
     res.status(200).json(notes)
 }))
 
+const getPublicNotesofPerson = tryCatch(asyncHandler(async (req, res) => {
+    const userid = req.params.userid
+    const notes = await Notes.find({user_id:userid,isPrivate:false})
+    res.status(200).json(notes)
+}))
 const changeVisibility = tryCatch(asyncHandler(async (req, res) => {
     const id = req.params.id
     const note = await Notes.findById(id)
@@ -36,9 +50,9 @@ const createNote = tryCatch(asyncHandler(async (req, res) => {
     const folder = await Folder.findById(folderId);
     if (folder) {
         //New Note of Folder
-        await Notes.create({ title, content, folderId, likes, tags, user_id: req.user.id })
+        const newNote = await Notes.create({ title, content, folderId, likes, tags, user_id: req.user.id })
 
-        return res.status(201).json({ message: `New Note Created on ${folder.name}` });
+        return res.status(201).json(newNote);
     } else {
         res.status(404)
         throw new Error("Folder Not Found")
@@ -109,7 +123,9 @@ module.exports = {
     getNote,
     deleteAllNote,
     searchNote,
+    getPublicNotesofPerson,
     changeVisibility,
-    getAllPublicNotes,
-    getAllUserNotes
+    getAllPublicNotesofUser,
+    getAllUserNotes,
+    getAllTags
 }
