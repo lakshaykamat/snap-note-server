@@ -17,7 +17,12 @@ connectDb()
 //Initializing app
 const app = express()
 //---Middleware---
-app.use(cors({origin: process.env.CLIENT_URL,credentials:true}))
+app.use(
+	cors({
+		origin: [process.env.CLIENT_URL],
+		credentials: true,
+	})
+);
 app.use(express.json())
 app.use(cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
@@ -35,7 +40,7 @@ app.get('/auth/google',
 
 app.get('/auth/google/callback',
     passport.authenticate('google', {
-        successRedirect: process.env.CLIENT_URL + '/',
+        successRedirect: process.env.CLIENT_URL,
         failureRedirect: process.env.CLIENT_URL + "/login/failed"
     })
 )
