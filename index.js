@@ -17,16 +17,25 @@ connectDb()
 //Initializing app
 const app = express()
 //---Middleware---
+const allowedOrigins = [ process.env.CLIENT_URL ]
 app.use(
-	cors({
-		origin: [process.env.CLIENT_URL],
-		credentials: true,
-	})
+    cors({
+        origin: function (origin, callback) {
+            // allow requests with no origin
+            // (like mobile apps or curl requests)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.indexOf(origin) === -1) {
+                var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+                return callback(new Error(msg), false);
+            }
+            return callback(null, true);
+        },
+    })
 );
 app.use(express.json())
 app.use(cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
-    keys: [process.env.COOKIE_SECRET] 
+    keys: [process.env.COOKIE_SECRET]
 }))
 app.use(passport.session())
 app.use(passport.initialize())
@@ -50,8 +59,8 @@ app.get('/auth/getuser', isAuthenticated, (req, res) => {
 })
 
 //---API Routes---
-app.use('/api/v1/notes',isAuthenticated, require('./routes/notes'))
-app.use('/api/v1/folder', isAuthenticated,require('./routes/folder'))
-app.use('/api/v1/user',isAuthenticated,require('./routes/user.js'))
+app.use('/api/v1/notes', isAuthenticated, require('./routes/notes'))
+app.use('/api/v1/folder', isAuthenticated, require('./routes/folder'))
+app.use('/api/v1/user', isAuthenticated, require('./routes/user.js'))
 app.use(errorHandler)
 app.listen(port, () => console.log(`Server listening on port ${port}!`))
