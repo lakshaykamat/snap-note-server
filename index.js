@@ -17,21 +17,17 @@ connectDb()
 //Initializing app
 const app = express()
 //---Middleware---
-const allowedOrigins = [ process.env.CLIENT_URL ]
 app.use(
     cors({
-        origin: function (origin, callback) {
-            // allow requests with no origin
-            // (like mobile apps or curl requests)
-            if (!origin) return callback(null, true);
-            if (allowedOrigins.indexOf(origin) === -1) {
-                var msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-                return callback(new Error(msg), false);
-            }
-            return callback(null, true);
-        },
+        origin: process.env.CLIENT_URL,
+        credentials: true,
     })
 );
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 app.use(express.json())
 app.use(cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
