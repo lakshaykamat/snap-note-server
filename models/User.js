@@ -3,11 +3,16 @@ const User = mongoose.Schema(
     {
         username:{
             type:String,
+            unique:[true,"Invalid username (already in use)"],
             required:[true,"Name is required"]
         },
         avatar:{
             type:String,
-            required:[true,"Avatar is required"]
+            
+        },
+        password:{
+            type:String,
+            required:true
         },
         email:{
             type:String,
@@ -16,7 +21,6 @@ const User = mongoose.Schema(
         },
         googleId:{
             type:String,
-            required:[true,"GoogleId can't be empty"]
         }
     },
     {

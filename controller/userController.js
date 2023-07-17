@@ -17,8 +17,16 @@ const getUser = tryCatch(asyncHandler(async (req, res) => {
       
 }))
 
+const deleteUser = tryCatch(asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const user = await User.findByIdAndDelete(id)
+    res.json(user)
+      
+}))
+
 
 module.exports = { 
     getAllUser,
-    getUser
+    getUser,
+    deleteUser
 }
