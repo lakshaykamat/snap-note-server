@@ -17,11 +17,6 @@ connectDb()
 //Initializing app
 const app = express()
 //---Middleware---
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
 app.use(
     cors({
         origin: process.env.CLIENT_URL,
