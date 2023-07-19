@@ -20,6 +20,7 @@ passport.use(new GoogleStrategy({
                 const newUser = await User.create({
                     googleId: profile.id,
                     username: profile._json.name,
+                    bio:"",
                     avatar: profile._json.picture,
                     email: profile._json.email
                 })
@@ -39,7 +40,6 @@ passport.use(new LocalStrategy(
     async function (username, password, done) {
         try {
             const user = await User.findOne({ username })
-            console.log(username,password,user)
             if (!user) return done(null, false)
             //if (!bcrypt.compare(password,10, )) return done(null, false);
             if(!bcrypt.compare(password, user.password)) return done(null, false);

@@ -10,6 +10,10 @@ const User = mongoose.Schema(
             type:String,
             
         },
+        bio:{
+            type:String,
+            maxlength:30,
+        },
         password:{
             type:String,
             required:true
