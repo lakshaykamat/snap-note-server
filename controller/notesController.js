@@ -12,7 +12,7 @@ const getAllTags = tryCatch(asyncHandler(async (req, res) => {
     const tagsArray = []
     notes.forEach(note => {
         tagsArray.push(...note.tags);
-      });
+    });
     res.status(200).json(tagsArray)
 }))
 
@@ -25,14 +25,14 @@ const getAllPublicNotesofUser = tryCatch(asyncHandler(async (req, res) => {
     res.status(200).json(notes)
 }))
 
-const getAllUserNotes = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await Notes.find({ user_id: req.user.id })
+const getAllPrivateNote = tryCatch(asyncHandler(async (req, res) => {
+    const notes = await Notes.find({ user_id: req.user.id,isPrivate:true })
     res.status(200).json(notes)
 }))
 
 const getPublicNotesofPerson = tryCatch(asyncHandler(async (req, res) => {
     const userid = req.params.userid
-    const notes = await Notes.find({user_id:userid,isPrivate:false})
+    const notes = await Notes.find({ user_id: userid, isPrivate: false })
     res.status(200).json(notes)
 }))
 const changeVisibility = tryCatch(asyncHandler(async (req, res) => {
@@ -41,6 +41,9 @@ const changeVisibility = tryCatch(asyncHandler(async (req, res) => {
     if (!note) {
         throw new Error("Note not found")
     }
+
+    if (req.user.id !== note.user_id.toString()) throw new Error("Something went wrong.")
+
     const visibility = note.isPrivate
     await Notes.findByIdAndUpdate(id, { isPrivate: !visibility }, { new: true })
     res.status(200).json({ message: `Note is now ${visibility ? "public" : "private"}` })
@@ -48,7 +51,12 @@ const changeVisibility = tryCatch(asyncHandler(async (req, res) => {
 const createNote = tryCatch(asyncHandler(async (req, res) => {
     const { title, content, folderId, tags, likes } = req.body;
     const folder = await Folder.findById(folderId);
+
+
     if (folder) {
+
+        if (req.user.id !== folder.user_id.toString()) throw new Error("Something went wrong.")
+
         //New Note of Folder
         const newNote = await Notes.create({ title, content, folderId, likes, tags, user_id: req.user.id })
 
@@ -64,6 +72,12 @@ const updateNote = tryCatch(asyncHandler(async (req, res) => {
     if (!note) {
         throw new Error("Note not found")
     }
+
+    /*
+        Anothor user is trying to edit other user note
+    */
+    if (req.user.id !== note.user_id.toString()) throw new Error("Something went wrong.")
+
     await Notes.findByIdAndUpdate(
         req.params.id,
         req.body,
@@ -81,6 +95,9 @@ const deleteNote = tryCatch(asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error("Note not found")
     }
+
+    if (req.user.id !== note.user_id.toString()) throw new Error("Something went wrong.")
+
     await Notes.findByIdAndDelete({ _id: req.params.id })
     res.status(200).json(note)
 
@@ -96,6 +113,9 @@ const getNote = tryCatch(asyncHandler(async (req, res) => {
         res.status(404)
         throw new Error("Note not Found")
     }
+
+    if (note.isPrivate && req.user.id !== note.user_id.toString()) throw new Error("Something went wrong.")
+
     res.status(200).json(note)
 }))
 const searchNote = tryCatch(asyncHandler(async (req, res) => {
@@ -103,12 +123,14 @@ const searchNote = tryCatch(asyncHandler(async (req, res) => {
     if (KEY) {
         const data = await Notes.find(
             {
-                $or: [
-                    { title: { $regex: KEY, $options: 'i' } },
-                    { content: { $regex: KEY, $options: 'i' } },
-                    { tags: { $regex: KEY, $options: 'i' } },
-                ]
-            }
+
+            $or: [
+                { title: { $regex: KEY, $options: 'i' } },
+                { content: { $regex: KEY, $options: 'i' } },
+                { tags: { $regex: KEY, $options: 'i' } },
+            ],
+            isPrivate:false
+        }
         )
         res.json(data)
     }
@@ -126,6 +148,6 @@ module.exports = {
     getPublicNotesofPerson,
     changeVisibility,
     getAllPublicNotesofUser,
-    getAllUserNotes,
+    getAllPrivateNote,
     getAllTags
 }

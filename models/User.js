@@ -3,7 +3,6 @@ const User = mongoose.Schema(
     {
         username:{
             type:String,
-            unique:[true,"Invalid username (already in use)"],
             required:[true,"Name is required"]
         },
         avatar:{
@@ -15,8 +14,7 @@ const User = mongoose.Schema(
             maxlength:30,
         },
         password:{
-            type:String,
-            required:true
+            type:String
         },
         email:{
             type:String,
