@@ -7,14 +7,10 @@ const User = mongoose.Schema(
         },
         avatar:{
             type:String,
-            
         },
         bio:{
             type:String,
             maxlength:30,
-        },
-        password:{
-            type:String
         },
         email:{
             type:String,

@@ -56,39 +56,39 @@ app.get('/auth/getuser', isAuthenticated, (req, res) => {
     res.status(200).json(req.user)
 })
 
-app.post('/login', 
-  passport.authenticate('local', { 
-    failureRedirect: process.env.CLIENT_URL + '/fail',
-}),(req,res)=>{
-    res.send("success")
-});
+// app.post('/login', 
+//   passport.authenticate('local', { 
+//     failureRedirect: process.env.CLIENT_URL + '/fail',
+// }),(req,res)=>{
+//     res.send("success")
+// });
 
-  app.post('/register', errorHandler,async(req, res,next) => {
-    const { username, password, email } = req.body;
+//   app.post('/register', errorHandler,async(req, res,next) => {
+//     const { username, password, email } = req.body;
   
-    try {
-        const user = await User.findOne({email,username})
-    console.log(user)
-    if(user){
-        res.status(400) 
-        throw new Error("User already exists")
-    }else{
-        const newUser = await User.create({username,password:await bcrypt.hash(password, 10),email}) 
-        return res.status(201).json(newUser)
-    }
-    } catch (error) {
-        return next(error)
-    }
-    // Check if a user with the same username or email already exists
+//     try {
+//         const user = await User.findOne({email,username})
+//     console.log(user)
+//     if(user){
+//         res.status(400) 
+//         throw new Error("User already exists")
+//     }else{
+//         const newUser = await User.create({username,password:await bcrypt.hash(password, 10),email}) 
+//         return res.status(201).json(newUser)
+//     }
+//     } catch (error) {
+//         return next(error)
+//     }
+//     // Check if a user with the same username or email already exists
     
 
-  });  
+//   });  
 
 
-  app.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect(process.env.CLIENT_URL+'/login');
-  });
+//   app.get('/logout', (req, res) => {
+//     req.logout();
+//     res.redirect(process.env.CLIENT_URL+'/login');
+//   });
 
 //---API Routes---
 app.use('/api/v1/notes', isAuthenticated, require('./routes/notes'))
