@@ -36,14 +36,17 @@ const createFolder = tryCatch(asyncHandler(async (req, res) => {
 const getFolder = tryCatch(asyncHandler(async(req, res) => {
     const {id} = req.params
     const folder = await Folder.findById(id)
-    res.json(folder)
+    if(req.user.id !== folder.user_id.toString()) throw new Error("Something went wrong.")
+    res.status(200).json(folder)
 }))
 
 const updateFolder = tryCatch(asyncHandler(async (req, res) => {
-    const note = await Folder.findById(req.params.id)
-    if (!note) {
+    const folder = await Folder.findById(req.params.id)
+    if (!folder) {
         throw new Error("Note not found")
     }
+
+    if(req.user.id !== folder.user_id.toString()) throw new Error("Something went wrong.")
     await Folder.findByIdAndUpdate(
         req.params.id,
         req.body,
@@ -57,6 +60,7 @@ const updateFolder = tryCatch(asyncHandler(async (req, res) => {
 
 const deleteFolder = tryCatch(asyncHandler(async (req, res) => {
     const {id} = req.params
+    if(req.user.id !== await Folder.findById(id).user_id.toString()) throw new Error("Something went wrong.")
     const folder = await Folder.findByIdAndDelete(id)
     const notes = await Notes.deleteMany({folderId:id})
     if(!folder){

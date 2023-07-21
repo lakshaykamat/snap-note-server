@@ -28,6 +28,7 @@ const deleteUser = tryCatch(asyncHandler(async (req, res) => {
 const updateUser = tryCatch(asyncHandler(async (req, res) => {
     const existingUser = await User.findById(req.params.id)
     if (!existingUser) throw new Error("Invalid User")
+    if(req.user.id !== existingUser._id.toString()) throw new Error("Something went wrong.")
     const user = await User.findByIdAndUpdate(
         req.params.id,
         req.body,
