@@ -1,0 +1,9 @@
+
+extends layout.pug 
+
+block content 
+    .flex.flex-col.max-w-sm.jusitfy-start.items-start.mx-6.gap-3
+        h1.text-4xl.font-bold=user.username
+        h2.text-2xl=user.email 
+        button.bg-red-500.px-3.py-2.text-white.rounded 
+            a(href="/logout") Logout
