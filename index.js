@@ -100,9 +100,8 @@ app.set('views', './views');
 
 //-- PUG Routes ---
 app.use('/',require('./views/routes/index.js'))
-app.use('/profile',require('./views/routes/profile.js'))
-app.use('/login',require('./views/routes/login.js'))
-app.use('/users',require('./views/routes/users.js'))
+app.use('/profile',isAuthenticated,require('./views/routes/profile.js'))
+app.use('/users',isAuthenticated,require('./views/routes/users.js'))
 
 
 //---API Routes--

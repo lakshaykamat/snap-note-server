@@ -1,0 +1,22 @@
+extends layout.pug
+
+block content
+
+    div 
+        .flex.flex-col.max-w-7xl.mx-auto.mb-6.mt-2.gap-1
+            h1.text-4xl.font-bold=user.username
+            h3.text-2xl.font-semibold Role #{role}
+            h4.text-base Notes Count #{notes.length}
+            h5.text-base Folder Count #{folders.length}
+
+    div.max-w-7xl.mx-auto
+        h1.text-2xl.mb-6 Notes
+        div.grid.grid-cols-4.gap-3.justify-center
+            each note in notes
+                - const folder = folders.find(folder => folder._id.toString() === note.folderId.toString())
+                div.flex.flex-col.max-w-sm.p-6.bg-white.border.border-gray-200.rounded-lg.shadow(class='hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700')
+                    h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900(class='dark:text-white') Title #{note.title}!
+                    p.text-sm.font-semibold(class='dark:text-white') Folder: #{folder.name}
+                //- div 
+                //-     != (note.content.length > 30 ? note.content.slice(0, 30) + '...' : note.content)
+
