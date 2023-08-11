@@ -2,6 +2,7 @@ const passport = require('passport');
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const { tryCatch } = require('../utils/tryCatch');
+const Admin = require('../models/Admin');
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
@@ -15,7 +16,6 @@ passport.use(new GoogleStrategy({
     async function (request, accessToken, refreshToken, profile, done) {
         try {
             const user = await User.findOne({ googleId: profile.id })
-            console.log(profile)
             if (!user) {
                 const newUser = await User.create({
                     googleId: profile.id,
@@ -36,20 +36,20 @@ passport.use(new GoogleStrategy({
     }
 ));
 
-// passport.use(new LocalStrategy(
-//     async function (username, password, done) {
-//         try {
-//             const user = await User.findOne({ username })
-//             if (!user) return done(null, false)
-//             //if (!bcrypt.compare(password,10, )) return done(null, false);
-//             if(!bcrypt.compare(password, user.password)) return done(null, false);
-//             return done(null, user)
-//         } catch (error) {
-//             return done(error, false)
-//         }
+passport.use(new LocalStrategy(
+    async function (username, password, done) {
+        try {
+            const user = await Admin.findOne({ username })
+            if (!user) return done(null, false)
+            //if (!bcrypt.compare(password,10, )) return done(null, false);
+            if(!bcrypt.compare(password, user.password)) return done(null, false);
+            return done(null, user)
+        } catch (error) {
+            return done(error, false)
+        }
 
-//     }
-// ));
+    }
+));
 
 passport.serializeUser(function (user, done) {
     done(null, user.id);
@@ -58,7 +58,7 @@ passport.serializeUser(function (user, done) {
 
 passport.deserializeUser(async function (id, done) {
     try {
-        const user = await User.findById(id)
+        const user = await User.findById(id) || await Admin.findById(id)
         done(null, user);
     } catch (error) {
         done(error, false);

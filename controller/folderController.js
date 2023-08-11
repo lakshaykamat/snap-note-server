@@ -60,13 +60,14 @@ const updateFolder = tryCatch(asyncHandler(async (req, res) => {
 
 const deleteFolder = tryCatch(asyncHandler(async (req, res) => {
     const {id} = req.params
-    if(req.user.id !== await Folder.findById(id).user_id.toString()) throw new Error("Something went wrong.")
+    const f = await Folder.findById(id)
+    if(!f) throw new Error("Folder Not found")
+
+    if(req.user.id !== f.user_id.toString()) throw new Error("Something went wrong.")
+
     const folder = await Folder.findByIdAndDelete(id)
-    const notes = await Notes.deleteMany({folderId:id})
-    if(!folder){
-        throw new Error("Folder Not found")
-    }
-    return res.json({message:"Folder Deleted",notes,folder})
+    await Notes.deleteMany({folderId:id})
+    return res.json({message:"Folder Deleted",folder})
 }))
 
 module.exports = { 

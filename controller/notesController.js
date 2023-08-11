@@ -3,6 +3,10 @@ const asyncHandler = require('express-async-handler');
 const Notes = require("../models/Notes");
 const Folder = require("../models/Folder");
 const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
+    if(req.query){
+        const notes = await Notes.find(req.query)
+        return res.status(200).json(notes)
+    }
     const notes = await Notes.find()
     res.status(200).json(notes)
 }))
@@ -17,7 +21,7 @@ const getAllTags = tryCatch(asyncHandler(async (req, res) => {
 }))
 
 const getAllPublicNotesofUser = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await Notes.find({ isPrivate: false })
+    const notes = await Notes.find({ isPrivate: false ,user_id:{$ne:req.user.id}})
 
     //Not Include own public notes in own feed
     //const newArray = notes.filter(obj => obj.user_id.toString() !== req.user.id);
@@ -76,7 +80,7 @@ const updateNote = tryCatch(asyncHandler(async (req, res) => {
     /*
         Anothor user is trying to edit other user note
     */
-    if (req.user.id !== note.user_id.toString()) throw new Error("Something went wrong.")
+    //if (req.user.id !== note.user_id.toString()) throw new Error("Something went wrong.")
 
     await Notes.findByIdAndUpdate(
         req.params.id,
