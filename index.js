@@ -43,72 +43,113 @@ app.use(passport.initialize())
 
 
 
-// app.get('/auth/google',
-//     passport.authenticate('google', { scope: ['email', 'profile'] })
-// )
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['email', 'profile'] })
+)
 
-// app.get('/auth/google/callback',
-//     passport.authenticate('google', {
-//         successRedirect: process.env.CLIENT_URL,
-//         failureRedirect: process.env.CLIENT_URL + "/login/failed"
-//     })
-// )
+app.get('/auth/google/callback',
+    passport.authenticate('google', {
+        successRedirect: process.env.CLIENT_URL,
+        failureRedirect: process.env.CLIENT_URL + "/login/failed"
+    })
+)
 
-// app.get('/auth/getuser', isAuthenticated, (req, res) => {
-//     res.status(200).json(req.user)
-// })
-
-
+app.get('/auth/getuser', isAuthenticated, (req, res) => {
+    res.status(200).json(req.user)
+})
 
 
-// app.post('/auth/login',
-//     passport.authenticate('local', {
-//         failureRedirect: '/fail',
-//         successRedirect: '/'
-//     }));
-
-// app.post('/auth/register', errorHandler, async (req, res, next) => {
-//     const { username, password, email } = req.body;
-//     try {
-//         const user = await Admin.findOne({ email, username })
-//         if (user) {
-//             res.status(400)
-//             throw new Error("User already exists")
-//         } else {
-//             const hash = await bcrypt.hash(password, 10)
-//             const user = { username, password: hash, email }
-//             const newUser = await Admin.create(user)
-//             return res.status(201).json(newUser)
-//         }
-//     } catch (error) {
-//         return next(error)
-//     }
-//     // Check if a user with the same username or email already exists
 
 
-// });
+app.post('/auth/login',
+    passport.authenticate('local', {
+        failureRedirect: '/fail',
+        successRedirect: '/'
+    }));
+
+app.post('/auth/register', errorHandler, async (req, res, next) => {
+    const { username, password, email, admin_pass } = req.body;
+
+    try {
+        if (admin_pass !== process.env.ADMIN_PASS) {
+            const message = { message: 'Invalid Password' }
+            const queryParams = new URLSearchParams(message).toString();
+            return res.redirect(`/register?${queryParams}`);
+        }
+
+        const user = await Admin.findOne({ email, username })
+        if (user) {
+            res.status(400)
+            throw new Error("User already exists")
+        } else {
+            const hash = await bcrypt.hash(password, 10)
+            const user = { username, password: hash, email }
+            await Admin.create(user)
+            res.redirect('/')
+        }
+    } catch (error) {
+        return next(error)
+    }
+});
 
 
-// app.get('/auth/logout', (req, res) => {
-//     req.logout();
-//     res.redirect('/login');
-// });
+app.get('/auth/logout', (req, res) => {
+    req.logout();
+    res.redirect('/login');
+});
 
 
 app.set('view engine', 'pug');
 app.set('views', './views');
 
 //-- PUG Routes ---
-app.use('/',require('./views/routes/index.js'))
-app.use('/profile',isAuthenticated,require('./views/routes/profile.js'))
-app.use('/users',isAuthenticated,require('./views/routes/users.js'))
+const routes = {
+    pug: [
+        {
+            path: '/',
+            file: 'index'
+        },
+        {
+            path: '/profile',
+            file: 'profile'
+        },
+        {
+            path: '/users',
+            file: 'users'
+        },
+        {
+            path: '/register',
+            file: 'register'
+        }
+    ],
+    REST_API: [
+        {
+            path: '/notes',
+            file: 'notes'
+        },
+        {
+            path: '/folder',
+            file: 'folder'
+        },
+        {
+            path: '/user',
+            file: 'user'
+        },
+        {
+            path: '/admin',
+            file: '/admin'
+        }
+    ]
+}
+routes.pug.forEach(route => app.use(`${route.path}`, require(`./views/routes/${route.file}.js`)));
 
 
 //---API Routes--
-app.use('/api/v1/notes', isAuthenticated, require('./routes/notes'))
-app.use('/api/v1/folder', isAuthenticated, require('./routes/folder'))
-app.use('/api/v1/user',isAuthenticated, require('./routes/user.js'))
-app.use('/api/v1/admin',isAuthenticated, require('./routes/admin.js'))
-app.use('/auth',require('./routes/authRoutes.js'))
+routes.REST_API.forEach(route => app.use(`${route.path}`, isAuthenticated, require(`./routes/${route.file}.js`)));
+// app.use('/api/v1/notes', isAuthenticated, require('./routes/notes'))
+// app.use('/api/v1/folder', isAuthenticated, require('./routes/folder'))
+// app.use('/api/v1/user', isAuthenticated, require('./routes/user.js'))
+// app.use('/api/v1/admin', isAuthenticated, require('./routes/admin.js'))
+// app.use('/auth',require('./routes/authRoutes.js'))
 app.use(errorHandler)
 app.listen(port, () => console.log(`Server listening on port ${port}!`))
