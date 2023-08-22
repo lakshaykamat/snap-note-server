@@ -3,20 +3,28 @@ const User = require("../../models/User");
 const Admin = require("../../models/Admin");
 const Notes = require("../../models/Notes");
 const Folder = require("../../models/Folder");
-const isAuthenticated = require("../../middleware/isAuthenticated");
+const { tryCatch } = require("../../utils/tryCatch");
+const asyncHandler = require("express-async-handler");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", tryCatch(asyncHandler(async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
 
-  if (!req.isAuthenticated()) return res.redirect('/login')
+  try {
+    const users = await User.find();
+    const admins = await Admin.find();
+    res.render("users", { users, admins, isLoggedIn: true });
+  } catch (error) {
+    // Handle any errors that might occur during the database queries or rendering
+    console.error("An error occurred:", error);
+    res.status(500).send("Internal Server Error");
+  }
+})));
 
-  const users = await User.find();
-  const admins = await Admin.find();
-  res.render("users", { users, admins, isLoggedIn: true });
 
-});
-
-router.get("/:userid", async (req, res) => {
+router.get("/:userid", tryCatch(asyncHandler(async (req, res) => {
   
   if (!req.isAuthenticated()) return res.redirect('/login')
 
@@ -33,6 +41,6 @@ router.get("/:userid", async (req, res) => {
     const notes = await Notes.find({ user_id: userid })
     const folders = await Folder.find({ user_id: userid })
     res.render("user", { ...obj, notes, folders, isLoggedIn: true })
-});
+})));
 
 module.exports = router;

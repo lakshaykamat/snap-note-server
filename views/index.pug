@@ -28,7 +28,9 @@ html
             a(href="/login") Login
 
   if isLoggedIn
-    h1.text-xl
-      a(href="/users") Users
+     a.block.max-w-sm.p-6.bg-white.border.border-gray-200.rounded-lg.shadow(href='/users', class='hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700')
+      h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900(class='dark:text-white') Users
+      p.font-normal.text-gray-700(class='dark:text-gray-400')
+        | Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
   else 
     h1.text-3xl.font-bold.text-center.mt-6 Loggin to access :/

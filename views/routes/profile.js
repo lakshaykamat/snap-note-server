@@ -1,15 +1,14 @@
 const express = require('express');
-const isAuthenticated = require('../../middleware/isAuthenticated');
+const asyncHandler = require('express-async-handler');
+const { tryCatch } = require('../../utils/tryCatch');
 const router = express.Router();
 
 
-router.get('/', async (req, res) => {
+router.get('/', tryCatch(asyncHandler(async (req, res) => {
 
     if (!req.isAuthenticated()) return res.redirect('/login')
 
-    const user = req.user
-    console.log(user)
-    res.render('profile', { user, isLoggedIn: true });
-})
+    res.render('profile', { user:req.user, isLoggedIn: true });
+})))
 
 module.exports = router;

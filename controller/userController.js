@@ -1,3 +1,5 @@
+const Notes = require("../models/Notes");
+const Folder = require("../models/Folder");
 const User = require("../models/User");
 const { tryCatch } = require("../utils/tryCatch");
 const asyncHandler = require('express-async-handler');
@@ -37,10 +39,17 @@ const updateUser = tryCatch(asyncHandler(async (req, res) => {
 
 }))
 
+const deleteAllData = tryCatch(asyncHandler(async (req, res) => {
+    await Notes.deleteMany({user_id:req.user.id})
+    await Folder.deleteMany({user_id:req.user.id})
+    res.status(200).json({success:true})
+}))
+
 
 module.exports = {
     getAllUser,
     getUser,
     deleteUser,
-    updateUser
+    updateUser,
+    deleteAllData
 }
