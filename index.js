@@ -106,7 +106,7 @@ ROUTES.PUG.forEach(route => {
 
 // Set up REST API routes with authentication
 ROUTES.REST_API.forEach(route => {
-    app.use(`/api/v1${route.path}`, isAuthenticated, require(`./routes/${route.file}.js`));
+    app.use(`/api/v1${route.path}`, require(`./routes/${route.file}.js`));
 });
 
 // Global error handler
