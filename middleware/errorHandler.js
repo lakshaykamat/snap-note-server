@@ -19,7 +19,6 @@ const errorHandler = (error, req, res, next) => {
     //   statusCode = 400;
     //   message = err.message;
     // }
-    console.log(error instanceof Error )
   
     // Send the error response to the client
     res.status(500).json({error:true,message:error.message});
