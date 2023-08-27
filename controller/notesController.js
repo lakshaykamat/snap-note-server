@@ -3,13 +3,16 @@ const asyncHandler = require('express-async-handler');
 const Notes = require("../models/Notes");
 const Folder = require("../models/Folder");
 const getAllNotes = tryCatch(asyncHandler(async (req, res) => {
-    if(req.query){
-        const notes = await Notes.find(req.query)
-        return res.status(200).json(notes)
+    let query = {};
+
+    if (req.query) {
+        query = req.query;
     }
-    const notes = await Notes.find()
-    res.status(200).json(notes)
-}))
+
+    const notes = await Notes.find(query).sort({ createdAt: -1 }).exec();
+
+    res.status(200).json(notes);
+}));
 
 const getAllTags = tryCatch(asyncHandler(async (req, res) => {
     const notes = await Notes.find()
@@ -17,11 +20,13 @@ const getAllTags = tryCatch(asyncHandler(async (req, res) => {
     notes.forEach(note => {
         tagsArray.push(...note.tags);
     });
-    res.status(200).json(tagsArray)
+    const un = [...new Set(tagsArray)];
+    res.status(200).json(un)
 }))
 
 const getAllPublicNotesofUser = tryCatch(asyncHandler(async (req, res) => {
-    const notes = await Notes.find({ isPrivate: false ,user_id:{$ne:req.user.id}})
+    const notes = await Notes.find({ isPrivate: false ,user_id:{$ne:req.user.id}}).sort({ createdAt: -1 }) // Sort by the 'createdAt' field in descending order
+    .exec();
 
     //Not Include own public notes in own feed
     //const newArray = notes.filter(obj => obj.user_id.toString() !== req.user.id);

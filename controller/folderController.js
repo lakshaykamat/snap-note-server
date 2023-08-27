@@ -40,6 +40,17 @@ const getFolder = tryCatch(asyncHandler(async(req, res) => {
     res.status(200).json(folder)
 }))
 
+const getFolderByName = tryCatch(asyncHandler(async(req, res) => {
+    const {name} = req.params
+    const folder = await Folder.find({name,user_id:req.user.id})
+    if(folder.length > 0){
+        const notes = await Notes.find({folderId:folder[0]._id,user_id:req.user.id})
+        res.status(200).json({folder,notes})
+    }
+    res.status(200).json({folder:null,notes:null})
+}))
+
+
 const updateFolder = tryCatch(asyncHandler(async (req, res) => {
     const folder = await Folder.findById(req.params.id)
     if (!folder) {
@@ -76,5 +87,6 @@ module.exports = {
     updateFolder,
     deleteFolder,
     getFolder,
-    getAllNotes
+    getAllNotes,
+    getFolderByName
 }

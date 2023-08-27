@@ -6,7 +6,8 @@ const {
     updateFolder,
     deleteFolder,
     createFolder,
-    getAllNotes
+    getAllNotes,
+    getFolderByName
 } = require('../controller/folderController')
 // const ValidateToken = require('../middleware/ValidateToken')
 
@@ -17,6 +18,7 @@ router.route('/')
 .post(createFolder)
 
 
+router.route('/name/:name').get(getFolderByName)
 router.route('/:id')
 .get(getFolder)
 .delete(deleteFolder)
