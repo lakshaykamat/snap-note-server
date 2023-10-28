@@ -9,8 +9,10 @@ const expressSession = require('express-session');
 const isAuthenticated = require('./middleware/isAuthenticated.js');
 const errorHandler = require('./middleware/errorHandler.js');
 const ROUTES = require('./constants/ROUTES.js');
-const Admin = require('./models/Admin.js');
-const bcrypt = require('bcrypt')
+const User = require('./models/User.js');
+const bcrypt = require('bcrypt');
+const { generateAvatar } = require('./utils/generateAvatar.js');
+
 
 // Connecting to Database
 connectDb();
@@ -58,34 +60,34 @@ app.get('/auth/getuser', isAuthenticated, (req, res) => {
 
 app.post('/auth/login',
     passport.authenticate('local', {
-        failureRedirect: '/fail',
-        successRedirect: '/'
+        failureRedirect: '/error',
+        successRedirect: '/',
     }));
 
-    app.post('/auth/register', errorHandler, async (req, res, next) => {
-        const { username, password, email, admin_pass } = req.body;
-    
-        if (process.env.ADMIN_PASS !== admin_pass) {
-            const queryParams = new URLSearchParams({ message: "Invalid" }).toString();
-            return res.redirect('/register?' + queryParams);
+app.get('/error',(req,res)=>{
+    res.send("Something went wrong")
+})
+
+app.post('/auth/register', errorHandler, async (req, res, next) => {
+    const { username, password, email } = req.body;
+
+    try {
+        const user = await User.findOne({ email, username });
+        if (user) {
+            res.status(400);
+            throw new Error("User already exists");
+        } else {
+            const hash = await bcrypt.hash(password, 10);
+            const avatar = generateAvatar(email)
+            const user = { username, password: hash, email,avatar };
+            const newUser = await User.create(user);
+            return res.status(201).json(newUser);
         }
-        
-        try {
-            const user = await Admin.findOne({ email, username });
-            if (user) {
-                res.status(400);
-                throw new Error("User already exists");
-            } else {
-                const hash = await bcrypt.hash(password, 10);
-                const user = { username, password: hash, email };
-                const newUser = await Admin.create(user);
-                return res.status(201).json(newUser);
-            }
-        } catch (error) {
-            return next(error);
-        }
-    });
-    
+    } catch (error) {
+        return next(error);
+    }
+});
+
 
 
 app.get('/auth/logout', (req, res) => {

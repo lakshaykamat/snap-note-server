@@ -1,3 +1,4 @@
 node_modules
 .env
 *.patch
+google_auth.json

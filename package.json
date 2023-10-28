@@ -21,6 +21,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.15.0",
     "graphql": "^16.7.1",
+    "gravatar": "^1.8.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
     "passport": "0.5",
