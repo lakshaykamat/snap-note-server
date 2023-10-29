@@ -12,6 +12,7 @@ const ROUTES = require('./constants/ROUTES.js');
 const User = require('./models/User.js');
 const bcrypt = require('bcrypt');
 const { generateAvatar } = require('./utils/generateAvatar.js');
+const { isVaildEmail } = require('./utils/isEmail.js');
 
 
 // Connecting to Database
@@ -70,6 +71,9 @@ app.get('/error',(req,res)=>{
 
 app.post('/auth/register', errorHandler, async (req, res, next) => {
     const { username, password, email } = req.body;
+
+    if(!isVaildEmail(email)) return res.status(401).json({error:true,message:"Invalid Email"})
+    if(!password) return res.status(401).json({error:true,message:"Password field can't be empty"})
 
     try {
         const user = await User.findOne({ email, username });
