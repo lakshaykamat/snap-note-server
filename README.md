@@ -1,4 +1,4 @@
-# Quill Sage Server
+# Snapnote Server
 
 This is the server component of the Note Application, which provides a backend API for managing notes and user authentication. It is built with Node.js, Express, and MongoDB.
 
@@ -17,7 +17,7 @@ This is the server component of the Note Application, which provides a backend A
 
 ## Getting Started
 
-1. Clone the repository: `git clone https://github.com/lakshaykamat/quillsage-server`
+1. Clone the repository: `git clone https://github.com/lakshaykamat/snap-note-server`
 2. Install dependencies: `npm install` or `yarn install`
 3. Configure the environment variables by creating a `.env` file based on the provided `.env.example` file.
 4. Start the server: `npm start` or `yarn start`
